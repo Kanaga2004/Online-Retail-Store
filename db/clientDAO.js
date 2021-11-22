@@ -3,10 +3,18 @@ const bcrypt = require("bcryptjs");
 
 //select all clients
 function find(callback) {
-  var rows = null;
-  //put your code her to select clients and return the array
-  //....
-  callback(null, rows);
+   //var rows = null;
+    //put your code her to select clients and return the array
+    //....
+    const selectClient = "SELECT * from client; ";
+    database.getResult(selectClient, function(err, rows) {
+        if (! err) {
+            callback(null, rows);
+        } else {
+            console.log(err);
+            throw err;
+        }
+    });
 }
 
 function findByUsername(username, callback) {
@@ -82,7 +90,7 @@ function createClient(client, callback) {
   });
 }
 module.exports = {
-  // find,
+  find,
   findByUsername,
   // findBySociety,
   findByNumclient,

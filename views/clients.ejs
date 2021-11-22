@@ -1,0 +1,30 @@
+<%- include('header'); -%>
+    <div class="content">
+        <h1>Selected articles</h1>
+        <table id="client">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th scope="col">Contact</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Fax</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% clients.forEach(client => { %>
+                    <tr>
+                        <td>
+                         <%= clients.contact %>
+                        </td>
+                        <td>
+                            <%= clients.phone %>
+                        </td>
+                        <td>
+                            <%= clients.fax %>
+                        </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+    </div>
+<%- include('footer'); -%>

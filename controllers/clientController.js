@@ -28,7 +28,7 @@ const loginControl = (request, response) => {
             request.session.num_client = client[0].num_client;
             request.session.admin = false;
             response.render("loginpage", {
-              result: `Login successful! (Username: ${username}, ID: ${client[0].num_client})`,
+              result: `Login successful! (Hello ${username}, ID: ${client[0].num_client})`,
             });
           }
         }
@@ -99,10 +99,36 @@ const getClientByNumclient = (request, response) => {
     response.end();
   });
 };
+const getClient = (request, response) => {
+    const clientServices = require('../services/clientServices');
+    let username = request.params.username;
+    let num_client;
+  
+    clientServices.searchUsername(username, function(err, rows) {
+        num_client = rows[0].num_client
+        clientServices.searchNumclientService(num_client, function(err, rows) {
+            console.log(rows[0])
+            response.render('clientDetails', {
+                username: username,
+                num_client: rows[0].num_client,
+                society: rows[0].society,
+                contact: rows[0].contact,
+                address: rows[0].addres,
+                zipcode: rows[0].zipcode,
+                city: rows[0].city,
+                phone: rows[0].phone,
+                fax: rows[0].fax,
+                maxOutstanding: rows[0].max_outstanding,
+            });
+        });
+    });
+  
+  };
 
 module.exports = {
   loginControl,
   registerControl,
   getClients,
+  getClient,
   getClientByNumclient,
 };
