@@ -32,13 +32,9 @@ function findByNumclient(num, callback) {
 }
 
 function cryptPassword(pass, callback) {
-  //set the complexity of the salt generation
-  const saltRounds = 10;
+  
   //generate random salt (to be added to the password to generate random hash)
-  bcrypt.genSalt(saltRounds, function (err, salt) {
-    if (err) {
-      throw err;
-    } else {
+  bcrypt.genSalt(10, function (err, salt) {
       //hash the password using the generated salt
       bcrypt.hash(pass, salt, function (err, hash) {
         if (err) {
@@ -49,12 +45,11 @@ function cryptPassword(pass, callback) {
           callback(err, hash);
         }
       });
-    }
   });
 }
 
 function createAccount(num_client, username, password, callback) {
-  cryptPassword(password, function (err, hash) {
+    cryptPassword(password, function (err, hash) {
     console.log(`Hash(${password}) -> ${hash}`);
     const insertAccount = `INSERT INTO account(num_client, username, password) VALUES(${num_client}, '${username}', '${hash}');`;
     database.getResult(insertAccount, function (err2, result2) {
