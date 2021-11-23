@@ -1,7 +1,7 @@
 const { Client } = require("../models/entities");
-
+const clientDAO = require("../db/clientDAO");
 const loginControl = (request, response) => {
-  const clientServices = require("../services/clientServices");
+const clientServices = require("../services/clientServices");
 
   let username = request.body.username;
   let password = request.body.password;
@@ -90,40 +90,44 @@ const getClients = (request, response) => {
     response.end();
   });
 };
-
-const getClientByNumclient = (request, response) => {
-  const clientServices = require("../services/clientServices");
-  let num_client = request.params.num_client;
-  clientServices.searchNumclientService(num_client, function (err, rows) {
-    response.json(rows);
-    response.end();
+function getClientByNumclient(num, callback) {
+  clientDAO.findByNumclient(num, function (err, rows) {
+    callback(null, rows);
   });
-};
+}
 const getClient = (request, response) => {
-    const clientServices = require('../services/clientServices');
-    let username = request.params.username;
-    let num_client;
-  
-    clientServices.searchUsername(username, function(err, rows) {
-        num_client = rows[0].num_client
-        clientServices.searchNumclientService(num_client, function(err, rows) {
-            console.log(rows[0])
-            response.render('clientDetails', {
-                username: username,
-                num_client: rows[0].num_client,
-                society: rows[0].society,
-                contact: rows[0].contact,
-                address: rows[0].addres,
-                zipcode: rows[0].zipcode,
-                city: rows[0].city,
-                phone: rows[0].phone,
-                fax: rows[0].fax,
-                maxOutstanding: rows[0].max_outstanding,
-            });
-        });
+  const clientServices = require("../services/clientServices");
+  let username = request.session.user;
+  if (request.session.admin) {
+    const selectClient = "SELECT * from client";
+    database.getResult(selectClient, function (err, rows) {
+      if (!err) {
+        response.render("clientsAdmin", { user: rows });
+      } else {
+      }
     });
-  
-  };
+  } else {
+    clientDAO.findByUsername(username, function (err, rows) {
+      num = rows[0].num_client;
+      getClientByNumclient(num, function (err, rows_2) {
+        console.log("test");
+        console.log(rows_2[0]);
+        response.render("clientDetails", {
+          username: username,
+          num: num,
+          society: rows_2[0].society,
+          contact: rows_2[0].contact,
+          addres: rows_2[0].addres,
+          zipcode: rows_2[0].zipcode,
+          city: rows_2[0].city,
+          phone: rows_2[0].phone,
+          fax: rows_2[0].fax,
+          max: rows_2[0].max_outstanding,
+        });
+      });
+    });
+  }
+};
 
 module.exports = {
   loginControl,

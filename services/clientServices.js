@@ -31,17 +31,7 @@ const loginService = (typedUsername, typedPassword, callback) => {
               throw err3;
             }
             if (rows.length === 1) {
-              let client = new Client(
-                rows[0].num_client,
-                rows[0].society,
-                rows[0].contact,
-                rows[0].addres,
-                rows[0].zipcode,
-                rows[0].city,
-                rows[0].phone,
-                rows[0].fax,
-                rows[0].max_outstanding
-              );
+              let client = new Client(rows[0].num_client, rows[0].society, rows[0].contact, rows[0].addres, rows[0].zipcode, rows[0].city, rows[0].phone, rows[0].fax, rows[0].max_outstanding);
               callback(null, true, rows);
             } else {
               throw err3;
@@ -82,30 +72,18 @@ const registerService = (client, callback) => {
   });
 };
 
-const searchService = function (callback) {
-  clientDAO.find(function(err, rows) {
-    if (err) {
-        throw err;
-    }
-    if (rows.length == 0) {
-        console.log("No clients!");
-    } else {
-        callback(null, rows);
-    }
-});
-};
 
-const searchNumclientService = function (num_client, callback) {
-  clientDAO.findByNumclient(num_client,function(err, rows) {
-    if (err) {
-        throw err;
-    }
-    if (rows.length == 0) {
-        console.log("No client with that id!");
-    } else {
-        callback(null, rows);
-    }
-});
+const searchService = function(callback) { //to be completed
+    clientDAO.find(function(err, rows) {
+        if (err) {
+            throw err;
+        }
+        if (rows.length == 0) {
+            console.log("No clients!");
+        } else {
+            callback(null, rows);
+        }
+    });
 };
 
 const searchUsername = function(username, callback) {
@@ -118,24 +96,37 @@ const searchUsername = function(username, callback) {
   });
 }
 
-const deleteService = function (num_client, callback) {
-  clientDAO.findByNumclient(num_client,function(err, rows) {
-    if (err) {
-        throw err;
-    }
-    if (rows.length == 0) {
-        console.log("No products!");
-    } else {
-        clientDAO.deleteClient(num_client,callback);
-    }
-});
+const searchNumclientService = function(num_client, callback) {
+    clientDAO.findByNumclient(num_client,function(err, rows) {
+        if (err) {
+            throw err;
+        }
+        if (rows.length == 0) {
+            console.log("No client with that id!");
+        } else {
+            callback(null, rows);
+        }
+    });
+};
+
+const deleteService = function(num_client, callback) {
+    clientDAO.findByNumclient(num_client,function(err, rows) {
+        if (err) {
+            throw err;
+        }
+        if (rows.length == 0) {
+            console.log("No products!");
+        } else {
+            clientDAO.deleteClient(num_client,callback);
+        }
+    });
 };
 
 module.exports = {
-  loginService,
-  registerService,
-  searchNumclientService,
-  searchService,
-  deleteService,
-  searchUsername,
+    loginService,
+    registerService,
+    searchNumclientService,
+    searchUsername,
+    searchService,
+    deleteService
 };
