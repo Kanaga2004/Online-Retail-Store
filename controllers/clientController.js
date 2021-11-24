@@ -1,5 +1,6 @@
 const { Client } = require("../models/entities");
 const clientDAO = require("../db/clientDAO");
+const database = require("../db/dbQuery");
 const loginControl = (request, response) => {
 const clientServices = require("../services/clientServices");
 
@@ -13,7 +14,7 @@ const clientServices = require("../services/clientServices");
     if (request.session && request.session.user) {
       response.render("loginpage", { result: "Already logged in!" });
     } else {
-      clientServices.loginService(
+        clientServices.loginService(
         username,
         password,
         function (err, dberr, client) {
@@ -26,9 +27,13 @@ const clientServices = require("../services/clientServices");
             //add to session
             request.session.user = username;
             request.session.num_client = client[0].num_client;
+            if (username == "Kanaga") {
+              request.session.admin = true;
+            } else {
             request.session.admin = false;
+            }
             response.render("loginpage", {
-              result: `Login successful! (Hello ${username}, ID: ${client[0].num_client})`,
+              result: `Login successful! (Username: ${username}, ID: ${client[0].num_client})`,
             });
           }
         }
