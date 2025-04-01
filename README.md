@@ -15,7 +15,7 @@ A full-stack web application for an online retail store built using **Node.js**,
 - 📊 Dynamic pages generated using EJS templates.
 - 🗃️ Clean project structure with MVC architecture (Models, Views, Controllers).
 - 📦 Session handling for shopping cart and user login.
-- ⚙️ Admin-only features (e.g., view client list) *(if implemented)*.
+- ⚙️ Admin-only features (e.g., view client list).
 
 ---
 
